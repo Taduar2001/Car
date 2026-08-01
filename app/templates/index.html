@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AV.BY Аналитика</title><link rel="stylesheet" href="/static/style.css"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body><main><header><div><h1>AV.BY Аналитика</h1><p>Какие марки, модели и годы чаще всего выставлены на продажу</p></div><form id="upload"><input type="file" id="file" accept=".csv" required><button>Загрузить CSV</button></form></header>
+<section class="cards"><article><span>Активных объявлений</span><strong id="total">—</strong></article><article><span>Средняя цена</span><strong id="price">—</strong></article></section>
+<section class="grid"><article><h2>Топ марок</h2><canvas id="brands"></canvas></article><article><h2>Топ моделей</h2><canvas id="models"></canvas></article><article><h2>Популярные годы</h2><canvas id="years"></canvas></article></section><p id="status"></p></main>
+<script>
+const charts={}; function draw(id,rows){if(charts[id])charts[id].destroy(); charts[id]=new Chart(document.getElementById(id),{type:'bar',data:{labels:rows.map(x=>x.name),datasets:[{label:'Объявления',data:rows.map(x=>x.count)}]},options:{indexAxis:id==='years'?'x':'y',responsive:true,plugins:{legend:{display:false}}}})}
+async function load(){const d=await fetch('/api/analytics').then(r=>r.json());total.textContent=d.summary.active_listings.toLocaleString('ru-RU');price.textContent='$'+d.summary.avg_price_usd.toLocaleString('ru-RU');draw('brands',d.brands);draw('models',d.models);draw('years',d.years)}
+upload.onsubmit=async e=>{e.preventDefault();const fd=new FormData();fd.append('file',file.files[0]);status.textContent='Импорт...';const r=await fetch('/api/import',{method:'POST',body:fd});const x=await r.json();status.textContent=r.ok?`Добавлено: ${x.added}`:(x.detail||'Ошибка');if(r.ok)load()};load();
+</script></body></html>

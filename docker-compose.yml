@@ -1,5 +1,13 @@
 services:
   web:
     build: .
-    ports: ["8000:8000"]
-    volumes: ["./data:/app/data"]
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/analytics')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Аналитика автомобильных объявлений: марки, модели, годы и цены." />
+  <title>AV.BY Market Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="Главная">
+      <span class="brand-mark">A</span>
+      <span>Auto<span>Scope</span></span>
+    </a>
+    <nav>
+      <a class="active" href="#overview"><span>▦</span> Обзор</a>
+      <a href="#brands"><span>◈</span> Марки</a>
+      <a href="#models"><span>▤</span> Модели</a>
+      <a href="#years"><span>◷</span> Годы</a>
+      <a href="#listings"><span>≡</span> Объявления</a>
+    </nav>
+    <div class="sidebar-note">
+      <strong>Локальная аналитика</strong>
+      <p>CSV обрабатывается только в вашем браузере.</p>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Рынок автомобилей</p>
+        <h1>Панель аналитики</h1>
+      </div>
+      <div class="top-actions">
+        <button class="secondary" id="demoButton">Загрузить демо</button>
+        <label class="upload-button">
+          <input id="fileInput" type="file" accept=".csv,text/csv" />
+          <span>＋ Импорт CSV</span>
+        </label>
+      </div>
+    </header>
+
+    <section class="hero" id="overview">
+      <div>
+        <span class="live-dot">Данные готовы к анализу</span>
+        <h2>Что продают чаще всего?</h2>
+        <p>Загрузите выгрузку объявлений и получите рейтинг марок, моделей, годов выпуска и ценовых сегментов.</p>
+      </div>
+      <div class="hero-badge">
+        <span>Источник</span>
+        <strong>CSV / AV.BY</strong>
+      </div>
+    </section>
+
+    <section class="filters panel">
+      <div class="filter-group grow">
+        <label for="searchInput">Поиск</label>
+        <input id="searchInput" type="search" placeholder="Марка или модель" />
+      </div>
+      <div class="filter-group">
+        <label for="brandFilter">Марка</label>
+        <select id="brandFilter"><option value="">Все марки</option></select>
+      </div>
+      <div class="filter-group">
+        <label for="yearFrom">Год от</label>
+        <input id="yearFrom" type="number" min="1950" max="2030" placeholder="2005" />
+      </div>
+      <div class="filter-group">
+        <label for="yearTo">Год до</label>
+        <input id="yearTo" type="number" min="1950" max="2030" placeholder="2026" />
+      </div>
+      <button id="resetFilters" class="icon-button" title="Сбросить фильтры">↻</button>
+    </section>
+
+    <section class="metrics" aria-label="Основные показатели">
+      <article class="metric-card">
+        <div class="metric-icon">▦</div>
+        <div><span>Объявлений</span><strong id="totalListings">0</strong><small id="listingDelta">Нет данных</small></div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-icon">$</div>
+        <div><span>Средняя цена</span><strong id="avgPrice">—</strong><small>по выбранной выборке</small></div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-icon">★</div>
+        <div><span>Лидер рынка</span><strong id="topBrand">—</strong><small id="topBrandShare">—</small></div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-icon">◷</div>
+        <div><span>Средний год</span><strong id="avgYear">—</strong><small id="yearRange">—</small></div>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel chart-card" id="brands">
+        <div class="panel-head"><div><span class="section-label">Структура рынка</span><h3>Топ марок</h3></div><span class="pill" id="brandCount">0 марок</span></div>
+        <div class="chart-wrap"><canvas id="brandsChart"></canvas></div>
+      </article>
+      <article class="panel chart-card" id="years">
+        <div class="panel-head"><div><span class="section-label">Возраст автомобилей</span><h3>Распределение по годам</h3></div><span class="pill">Количество</span></div>
+        <div class="chart-wrap"><canvas id="yearsChart"></canvas></div>
+      </article>
+      <article class="panel chart-card wide" id="models">
+        <div class="panel-head"><div><span class="section-label">Спрос предложения</span><h3>Самые частые модели</h3></div><span class="pill">Топ-10</span></div>
+        <div class="chart-wrap tall"><canvas id="modelsChart"></canvas></div>
+      </article>
+      <article class="panel price-card">
+        <div class="panel-head"><div><span class="section-label">Ценовые сегменты</span><h3>Распределение цен</h3></div></div>
+        <div class="price-list" id="priceSegments"></div>
+      </article>
+    </section>
+
+    <section class="panel table-panel" id="listings">
+      <div class="panel-head">
+        <div><span class="section-label">Исходные данные</span><h3>Объявления</h3></div>
+        <button class="secondary" id="exportButton">Экспорт результата</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Марка</th><th>Модель</th><th>Год</th><th>Цена</th><th>Город</th><th>Ссылка</th></tr></thead>
+          <tbody id="listingsBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState">
+        <strong>Загрузите CSV-файл</strong>
+        <p>Поддерживаются колонки: brand, model, year, price_usd, city, url.</p>
+      </div>
+    </section>
+
+    <footer>AutoScope Analytics · данные не отправляются на сервер</footer>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>

@@ -1,7 +1,6 @@
-source_id,url,brand,model,year,price_usd,city
-1001,https://cars.av.by/example/1001,Volkswagen,Passat,2012,11900,Минск
-1002,https://cars.av.by/example/1002,BMW,5 series,2018,28500,Минск
-1003,https://cars.av.by/example/1003,Volkswagen,Polo,2016,12800,Гродно
-1004,https://cars.av.by/example/1004,Audi,A6,2015,21900,Брест
-1005,https://cars.av.by/example/1005,Volkswagen,Passat,2014,15400,Минск
-1006,https://cars.av.by/example/1006,BMW,3 series,2016,19400,Витебск
+source_id,brand,model,year,price_usd,city,url
+1,Volkswagen,Passat,2015,16900,Минск,https://av.by/
+2,BMW,5 series,2016,28700,Минск,https://av.by/
+3,Audi,A6,2014,22900,Брест,https://av.by/
+4,Skoda,Octavia,2018,18900,Гомель,https://av.by/
+5,Toyota,Camry,2017,26900,Гродно,https://av.by/

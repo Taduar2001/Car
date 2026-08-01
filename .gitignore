@@ -1,9 +1,2 @@
-__pycache__/
-*.py[cod]
-.venv/
-.env
-.idea/
-.vscode/
 .DS_Store
-data/*.db
-data/upload.csv
+Thumbs.db
